@@ -89,7 +89,7 @@ void read_formula(string line, ofstream &outFile) {
 					i++;
 				}
 
-				if (i < len && !isdigit(line[i])) {
+				if (!isdigit(line[i])) {
 					push(Indexes, "1");
 				}
 				
@@ -124,7 +124,7 @@ void read_formula(string line, ofstream &outFile) {
 		output += out_elem + ": " + out_index + ", ";
 	}
 
-	cout << output;
+	cout << output << endl;
 
 	outFile << output << "\n";
 }
