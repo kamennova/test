@@ -72,10 +72,71 @@ void read_formula(string line, ofstream &outFile) {
 	int len = line.size();
 	List Indexes;
 	List Elem;
+	List ParentheseIndex;
+	List ParentheseElem;
 
 	for (int i = 0; i < len; i++) {
 		// parentheses
 		if (is_parenthese(line[i])) {
+			i++;
+			while (i < len && !is_closing(line[i])) {
+				if (__ascii_isalpha(line[i])) {
+					if (isupper(line[i])) {
+						string elem;
+						elem += line[i];
+						i++;
+						while (__ascii_isalpha(line[i]) && !isupper(line[i])) {
+							elem += line[i];
+							i++;
+						}
+
+						if (!isdigit(line[i])) {
+							push(ParentheseIndex, "1");
+						}
+
+						i--;
+						push(ParentheseElem, elem);
+					}
+				}
+
+				if (isdigit(line[i])) {
+					string index;
+
+					while (isdigit(line[i])) {
+						index += line[i];
+						i++;
+					}
+					i--;
+
+					//int index_num = index;
+					push(ParentheseIndex, index);
+				}
+
+				i++;
+			}
+			
+			string index_p;
+			if (isdigit(line[i])) {
+
+				while (isdigit(line[i])) {
+					index_p += line[i];
+					i++;
+				}
+				i--;
+
+				//int index_num = index;
+			}
+
+			string out_index;
+			string out_elem;
+			while (pop(ParentheseIndex, out_index)) {
+				pop(ParentheseElem, out_elem);
+				push(Indexes, out_index);
+				out_index = out_index + '*' + index_p;
+
+				push(Elem, out_elem);
+			}
+
 			continue;
 		} 
 			
@@ -109,10 +170,7 @@ void read_formula(string line, ofstream &outFile) {
 	
 			//int index_num = index;
 			push(Indexes, index);
-			//cout << index;
 		}
-
-		//cout << endl;
 	}
 
 	string output;
